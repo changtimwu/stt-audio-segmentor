@@ -1,14 +1,14 @@
-# Subtitle Audio Extract
+# STT Audio Segmentor
 
-A desktop utility that slices an audio recording into individual segments using timestamps from a subtitle/transcript Excel file. Each segment corresponds to one subtitle line, making it easy to produce per-sentence audio clips for TTS training, language learning, or dubbing workflows.
+A desktop utility that slices an audio recording into individual segments using timestamps from a transcript Excel or CSV file. Each segment corresponds to one utterance, making it easy to produce per-sentence audio clips for STT (Speech-to-Text) model training, language learning, or dubbing workflows.
 
 ## How segmentation works
 
-The core idea is straightforward: every row in the Excel file carries a **relative timestamp** marking when that subtitle line begins. The tool treats each consecutive pair of timestamps as a `[start, end)` boundary and extracts the audio between them.
+The core idea is straightforward: every row in the input file carries a **relative timestamp** marking when that utterance begins. The tool treats each consecutive pair of timestamps as a `[start, end)` boundary and extracts the audio between them.
 
 ```
-Excel rows                 Audio timeline
-─────────────              ──────────────────────────────────────────────►
+Input rows                 Audio timeline
+──────────────             ──────────────────────────────────────────────►
 Row 1  0:00.000  "Hello"   ├── seg_0 ──┤
 Row 2  0:02.450  "World"             ├─── seg_1 ────┤
 Row 3  0:05.800  "Bye"                           ├──── seg_2 ─────────────
@@ -45,7 +45,7 @@ recording_segments/
   recording_1.wav
   ...
   recording_N.wav
-  transcripts.txt        ← tab-separated: filename <TAB> subtitle text
+  transcripts.txt        ← tab-separated: filename <TAB> transcript text
 ```
 
 `transcripts.txt` format:
@@ -55,14 +55,16 @@ recording_1.wav    World
 recording_2.wav    Bye
 ```
 
-## Excel file format
+## Input file format
 
-The first sheet is used. Required columns (names are configurable in Advanced options):
+The first sheet (Excel) or the entire file (CSV) is used. Required columns (names are configurable in Advanced options):
 
 | Column | Default name | Description |
 |---|---|---|
 | Timestamp | `Relative Timestamp` | `MM:SS` or `HH:MM:SS[.ms]` format |
-| Text | `Text` | Subtitle/transcript text for that line |
+| Text | `Text` | Transcript text for that utterance |
+
+Supported input formats: `.xlsx`, `.xls`, `.csv`
 
 ## Supported audio formats
 
@@ -98,15 +100,15 @@ GOOS=windows GOARCH=amd64 wails build -platform windows/amd64 -nsis
 
 | Platform | Command flag | Output |
 |---|---|---|
-| macOS | _(default)_ | `subtitle-audio-extract.app` |
-| Windows | `-platform windows/amd64` | `subtitle-audio-extract.exe` |
-| Windows installer | `-platform windows/amd64 -nsis` | `subtitle-audio-extract-amd64-installer.exe` |
+| macOS | _(default)_ | `stt-audio-segmentor.app` |
+| Windows | `-platform windows/amd64` | `stt-audio-segmentor.exe` |
+| Windows installer | `-platform windows/amd64 -nsis` | `stt-audio-segmentor-amd64-installer.exe` |
 
 #### Windows installer details
 
 The Windows installer is built with [NSIS](https://nsis.sourceforge.io) using the script at `build/windows/installer/project.nsi`. It:
 
-- Installs the app to `Program Files\subtitle-audio-extract\`
+- Installs the app to `Program Files\stt-audio-segmentor\`
 - Creates a Start Menu shortcut and a Desktop shortcut
 - Bundles the [WebView2 runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/) bootstrap (downloads it silently if not already present on the user's machine)
 - Includes a standard uninstaller (accessible from Add/Remove Programs)

@@ -15,7 +15,7 @@ func main() {
 	app := NewApp()
 
 	err := wails.Run(&options.App{
-		Title:  "Subtitle Audio Extract",
+		Title:  "STT Audio Segmentor",
 		Width:  700,
 		Height: 700,
 		AssetServer: &assetserver.Options{

@@ -137,7 +137,7 @@ function App() {
 
   return (
     <div id="App">
-      <h1>Subtitle Audio Extract</h1>
+      <h1>STT Audio Segmentor</h1>
 
       <FilePicker
         label="Excel / CSV File"

@@ -1,4 +1,4 @@
-module subtitle-audio-extract
+module stt-audio-segmentor
 
 go 1.24.0
 
