@@ -13,9 +13,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: macos-13
-            platform: darwin/amd64
-            artifact: stt-audio-segmentor-darwin-amd64.zip
           - os: macos-latest
             platform: darwin/arm64
             artifact: stt-audio-segmentor-darwin-arm64.zip
